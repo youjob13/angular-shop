@@ -19,7 +19,7 @@ export class CartListComponent implements OnInit {
     this.cartList = this.cartListService.getCartList();
   }
 
-  trackByProducts(index: number, product: IProduct): string {
+  trackByProductName(index: number, product: IProduct): string {
     return product.name;
   }
 }

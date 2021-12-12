@@ -1,6 +1,6 @@
 <h2 class="title">Cart</h2>
 <ul *ngIf='cartList.length; else elseBlock'>
-  <li *ngFor='let product of cartList; trackBy: trackByProducts'>
+  <li *ngFor='let product of cartList; trackBy: trackByProductName'>
     <app-first
       [name]='product.name'
       [description]='product.description'
