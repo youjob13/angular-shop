@@ -1,0 +1,14 @@
+<h2 class="title">Products</h2>
+<ol *ngIf='!!products'>
+  <li *ngFor='let product of products'>
+      <app-product
+        [name]='product.name'
+        [description]='product.description'
+        [price]='product.price'
+        [category]='product.category'
+        [isAvailable]='product.isAvailable'
+      ></app-product>
+  </li>
+</ol>
+
+
