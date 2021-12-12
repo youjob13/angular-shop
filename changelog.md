@@ -7,4 +7,4 @@
 - a little layout
 - first component
 
-[0.0.1] https://github.com/youjob13/angular-shop/compare/feat/task-1...master
+[0.0.1]: https://github.com/youjob13/angular-shop/compare/feat/task-1...master

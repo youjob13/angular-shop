@@ -1,0 +1,33 @@
+<div *ngIf='!!name' class="product">
+  <app-first
+    [name]='name'
+    [description]='description'
+    [price]='price'
+    [category]='category'
+    [isAvailable]='isAvailable'
+  ></app-first>
+  <!-- <ul>
+    <li>
+      <strong>Name:</strong>
+      <span>{{name}}</span>
+    </li>
+    <li>
+      <strong>Description:</strong>
+      <span>{{description}}</span>
+    </li>
+    <li>
+      <strong>Price:</strong>
+      <span>{{price}}</span>
+    </li>
+    <li>
+      <strong>Category:</strong>
+      <span>{{category}}</span>
+    </li>
+    <li>
+      <strong>Available:</strong>
+      <span>{{getProductStatus()}}</span>
+    </li>
+  </ul> -->
+
+  <button class="btn" (click)='onAddToCart()'>Buy</button>
+</div>
