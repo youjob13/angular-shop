@@ -1,0 +1,13 @@
+.product {
+  display: grid;
+  grid-template-columns: 7fr 1fr;
+  column-gap: 2rem;
+  align-items: center;
+}
+
+.btn {
+  text-align: center;
+  font-size: 1rem;
+  padding: 1rem;
+  cursor: pointer;
+}

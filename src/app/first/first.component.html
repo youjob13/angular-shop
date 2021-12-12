@@ -1,0 +1,22 @@
+<div class='first' *ngIf='name'>
+  <p>
+    <strong>Name:</strong>
+    <span>{{name}}</span>
+  </p>
+  <p>
+    <strong>Description:</strong>
+    <span>{{description}}</span>
+  </p>
+  <p>
+    <strong>Price:</strong>
+    <span>{{price}}</span>
+  </p>
+  <p>
+    <strong>Category:</strong>
+    <span>{{category}}</span>
+  </p>
+  <p>
+    <strong>Available:</strong>
+    <span>{{getProductStatus()}}</span>
+  </p>
+</div>
