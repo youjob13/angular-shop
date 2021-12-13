@@ -22,7 +22,7 @@ export class FirstComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getProductStatus() {
+  getProductStatus(): string {
     return this.isAvailable ? 'Yes' : 'No';
   }
 }

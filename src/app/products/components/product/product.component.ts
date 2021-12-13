@@ -15,11 +15,14 @@ export class ProductComponent implements OnInit {
   @Input() category = Category.OTHER;
   @Input() isAvailable = false;
 
+  // не стоит тут внедрять зависимость
+  // этот компонент не владеет данными и не должен с ними что-то делать,
+  // кроме отображения
   constructor(private cartListService: CartListService) {}
 
   ngOnInit(): void {}
 
-  onAddToCart() {
+  onAddToCart(): void {
     console.log('Product purchased');
     const product = {
       name: this.name,
@@ -32,7 +35,7 @@ export class ProductComponent implements OnInit {
     this.cartListService.addProduct(product);
   }
 
-  getProductStatus() {
+  getProductStatus(): string {
     return this.isAvailable ? 'Yes' : 'No';
   }
 }

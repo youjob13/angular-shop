@@ -5,7 +5,7 @@ import { Category, IProduct } from '../components/product/product.model';
   providedIn: 'root',
 })
 export class ProductsService {
-  products: IProduct[] = [
+  private products: IProduct[] = [
     {
       name: 'IPhone 13',
       description: 'Beautiful design',
