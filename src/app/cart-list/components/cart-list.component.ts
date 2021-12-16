@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  Category,
-  IProduct,
-} from 'src/app/products/components/product/product.model';
+import { IProduct } from 'src/app/products/components/product/product.model';
 import { CartListService } from '../services/cart-list.service';
 
 @Component({

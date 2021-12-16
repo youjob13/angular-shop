@@ -27,11 +27,11 @@ export class CartListService {
 
   constructor() {}
 
-  getCartList() {
+  getCartList(): IProduct[] {
     return this.cartList;
   }
 
-  addProduct(product: IProduct) {
+  addProduct(product: IProduct): void {
     this.cartList.push(product);
   }
 }
