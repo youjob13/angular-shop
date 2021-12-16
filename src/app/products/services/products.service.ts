@@ -45,7 +45,7 @@ export class ProductsService {
 
   constructor() {}
 
-  getProducts() {
+  getProducts(): IProduct[] {
     return this.products;
   }
 }
