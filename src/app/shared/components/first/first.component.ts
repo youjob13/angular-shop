@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 enum Category {
   LAPTOP = 'laptop',
@@ -10,8 +10,9 @@ enum Category {
   selector: 'app-first',
   templateUrl: './first.component.html',
   styleUrls: ['./first.component.scss', '../app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FirstComponent implements OnInit {
+export class FirstComponent {
   @Input() name!: string;
   @Input() description!: string;
   @Input() price!: number;
@@ -19,8 +20,6 @@ export class FirstComponent implements OnInit {
   @Input() isAvailable!: boolean;
 
   constructor() {}
-
-  ngOnInit(): void {}
 
   getProductStatus(): string {
     return this.isAvailable ? 'Yes' : 'No';

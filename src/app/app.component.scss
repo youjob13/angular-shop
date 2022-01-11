@@ -1,3 +1,29 @@
+$black-color: #000;
+$light-color: #fff;
+$dark-gray-color: darkslategrey;
+$blue-color: rgb(78, 156, 233);
+$blue-color: rgb(78, 156, 233);
+
+@mixin title() {
+  font-size: 2rem;
+  border-bottom: 0.13rem solid $black-color;
+  margin-bottom: 1.8rem;
+}
+
+@mixin btn() {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 0.4rem 0.6rem;
+  border: none;
+  cursor: pointer;
+}
+
+@mixin flex-row() {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -37,13 +63,25 @@ ul {
     top: 0;
     bottom: 0;
     width: 0.13rem;
-    background-color: #000;
+    background-color: $black-color;
     display: block;
   }
 }
 
 .title {
-  color: darkslategrey;
-  border-bottom: 0.13rem solid #000;
-  margin-bottom: 2rem;
+  @include title;
+  text-align: center;
+  text-transform: capitalize;
+  color: $dark-gray-color;
+}
+
+.subtitle {
+  color: $dark-gray-color;
+  font-size: 1.2rem;
+}
+
+.button {
+  @include btn;
+  background-color: $blue-color;
+  color: $light-color;
 }

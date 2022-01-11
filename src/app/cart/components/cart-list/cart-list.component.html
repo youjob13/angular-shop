@@ -1,0 +1,19 @@
+<h2 class="title">Cart</h2>
+
+<div class="information">
+  <p class="information-block"><strong>Number of goods:</strong> <span>{{goodsNumber}}</span></p>
+  <p class="information-block"><strong>Amount of purchased goods:</strong> <span>{{amountOfPurchasedGoods}}</span></p>
+</div>
+
+<ul *ngIf='cartList.length; else elseBlock'>
+  <li *ngFor='let product of cartList; trackBy: trackByProductId'>
+    <app-cart-item
+      [product]='product'
+      (changeGoodsNumber)='changeProductCount($event)'
+      (removeProductFromCart)='removeProductFromCart($event)'></app-cart-item>
+  </li>
+</ul>
+
+<ng-template #elseBlock>
+  <p>Cart is empty :(</p>
+</ng-template>

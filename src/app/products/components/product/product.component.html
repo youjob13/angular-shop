@@ -7,5 +7,5 @@
     [isAvailable]='product.isAvailable'
   ></app-first>
 
-  <button class="btn" (click)='onAddToCart()'>Buy</button>
+  <button *ngIf="product.isAvailable" class="button" (click)='onAddToCart()'>Buy</button>
 </div>
