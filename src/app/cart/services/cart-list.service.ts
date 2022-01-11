@@ -19,10 +19,7 @@ export class CartListService {
   }
 
   removeProduct(productId: string): void {
-    const productIndex = this.cartList.findIndex(
-      (product) => product.id === productId
-    );
-    this.cartList.splice(productIndex, 1);
+    this.cartList = this.cartList.filter((product) => product.id !== productId);
   }
 
   getCartList(): IPurchasedProduct[] {
@@ -35,7 +32,10 @@ export class CartListService {
     );
 
     if (!currentProduct) {
-      this.cartList.push({ ...newProduct, count: initialProductCount });
+      this.cartList = [
+        ...this.cartList,
+        { ...newProduct, count: initialProductCount },
+      ];
     } else {
       this.cartList = this.cartList.map((product) =>
         product.id === currentProduct.id
