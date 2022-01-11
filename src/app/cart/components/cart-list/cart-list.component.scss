@@ -1,0 +1,12 @@
+@import "../../../app.component.scss";
+
+.information {
+  @include flex-row;
+  margin-bottom: 2rem;
+
+  &-block {
+    strong {
+      margin-right: 0.3rem;
+    }
+  }
+}

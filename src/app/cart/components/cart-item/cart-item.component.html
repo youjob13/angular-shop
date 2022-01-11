@@ -1,0 +1,24 @@
+<div appHighlight='yellow'>
+   <app-first
+      [name]='product.name'
+      [description]='product.description'
+      [price]='product.price'
+      [category]='product.category'
+      [isAvailable]='product.isAvailable'
+    ></app-first>
+  <div>
+
+  <div class="controls">
+    <div>
+      <label for="number">Number:</label>
+      <input
+        type="number"
+        min="1"
+        [value]="product.count"
+        (input)="onChangeGoodsNumber($event)"
+        (wheel)="onChangeGoodsNumber($event)"
+      >
+    </div>
+    <button class="button" (click)='onRemoveProductFromCart()'>Remove</button>
+  </div>
+</div>
