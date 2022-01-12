@@ -1,6 +1,7 @@
 <h2 class="title">Products</h2>
 <ol>
   <li *ngFor='let product of products'>
+<!-- Я бы передал данные с помощью одного инпута, который принимает объект -->
       <app-product
       (addProductToCart)="addProductToCart($event)"
         [product]=product
