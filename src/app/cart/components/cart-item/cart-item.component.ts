@@ -14,6 +14,7 @@ import { IPurchasedProduct } from '../../cart.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartItemComponent {
+  // мне привычнее видеть сначала инпуты, затем аутпуты
   @Output() changeGoodsNumber: EventEmitter<IPurchasedProduct> =
     new EventEmitter<IPurchasedProduct>();
   @Output() removeProductFromCart: EventEmitter<string> =
