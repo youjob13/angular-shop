@@ -14,6 +14,7 @@ export class CartListComponent implements AfterContentChecked {
 
   constructor(private cartListService: CartListService) {}
 
+  // почему тут?
   ngAfterContentChecked(): void {
     this.cartList = this.cartListService.getCartList();
     this.goodsNumber = this.cartListService.calculateProductsNumber();
