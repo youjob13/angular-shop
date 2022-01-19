@@ -10,7 +10,7 @@ import { IProduct } from '../../../shared/models/product.model';
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
-  styleUrls: ['./product.component.scss', '../../../app.component.scss'],
+  styleUrls: ['./product.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductComponent {

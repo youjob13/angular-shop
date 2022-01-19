@@ -5,27 +5,31 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { IPurchasedProduct } from '../../cart.model';
+import { ChangedProductCount, IPurchasedProduct } from '../../cart.model';
 
 @Component({
   selector: 'app-cart-item',
   templateUrl: './cart-item.component.html',
-  styleUrls: ['./cart-item.component.scss', '../../../app.component.scss'],
+  styleUrls: ['./cart-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartItemComponent {
-  @Output() changeGoodsNumber: EventEmitter<IPurchasedProduct> =
-    new EventEmitter<IPurchasedProduct>();
+  @Input() product!: IPurchasedProduct;
+  @Output() changeProductQuantity: EventEmitter<ChangedProductCount> =
+    new EventEmitter<ChangedProductCount>();
   @Output() removeProductFromCart: EventEmitter<string> =
     new EventEmitter<string>();
-  @Input() product!: IPurchasedProduct;
 
   constructor() {}
 
   onChangeGoodsNumber(event: Event): void {
     const target = event.target as HTMLInputElement;
     const productCount = Number(target.value);
-    this.changeGoodsNumber.emit({ ...this.product, count: productCount });
+
+    this.changeProductQuantity.emit({
+      productId: this.product.id,
+      productCount,
+    });
   }
 
   onRemoveProductFromCart(): void {

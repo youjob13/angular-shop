@@ -8,49 +8,95 @@ const initialProductCount = 1;
   providedIn: 'root',
 })
 export class CartListService {
-  private cartList: IPurchasedProduct[] = [];
+  private cartProducts: IPurchasedProduct[] = [];
+  private _totalQuantity: number = 0;
+  private _totalSum: number = 0;
 
   constructor() {}
 
-  changeProductCount(product: IPurchasedProduct): void {
-    this.cartList = this.cartList.map((productInCart) =>
-      productInCart.id === product.id ? product : productInCart
-    );
+  get totalQuantity(): number {
+    return this._totalQuantity;
+  }
+
+  private set totalQuantity(count: number) {
+    this._totalQuantity = count;
+  }
+
+  get totalSum(): number {
+    return this._totalSum;
+  }
+
+  private set totalSum(count: number) {
+    this._totalSum = count;
+  }
+
+  removeAllProducts(): void {
+    this.cartProducts = [];
+
+    this.updateCartData();
   }
 
   removeProduct(productId: string): void {
-    this.cartList = this.cartList.filter((product) => product.id !== productId);
+    this.cartProducts = this.cartProducts.filter(
+      (product) => product.id !== productId
+    );
+
+    this.updateCartData();
   }
 
-  getCartList(): IPurchasedProduct[] {
-    return this.cartList;
+  getProducts(): IPurchasedProduct[] {
+    return this.cartProducts;
+  }
+
+  isEmptyCart(): boolean {
+    return !!this.cartProducts.length;
   }
 
   addProduct(newProduct: IProduct): void {
-    const currentProduct = this.cartList.find(
+    const currentProduct = this.cartProducts.find(
       (product) => product.id === newProduct.id
     );
 
     if (!currentProduct) {
-      this.cartList = [
-        ...this.cartList,
+      this.cartProducts = [
+        ...this.cartProducts,
         { ...newProduct, count: initialProductCount },
       ];
+      this.updateCartData();
     } else {
-      this.cartList = this.cartList.map((product) =>
-        product.id === currentProduct.id
-          ? { ...product, count: product.count + 1 }
-          : product
-      );
+      this.changeQuantity(currentProduct.id, currentProduct.count + 1);
     }
+
+    console.log(this.cartProducts);
   }
 
-  calculateProductsNumber(): number {
-    return this.cartList.reduce((count, product) => product.count + count, 0);
+  changeQuantity(productId: string, productCount: number): void {
+    this.cartProducts = this.cartProducts.map((product) =>
+      product.id === productId
+        ? {
+            ...product,
+            count: productCount,
+          }
+        : product
+    );
+
+    this.updateCartData();
   }
 
-  calculateAmountOfPurchasedGoods(): number {
-    return this.cartList.reduce(
+  private updateCartData(): void {
+    this.calculateTotalQuantity();
+    this.calculateTotalSum();
+  }
+
+  private calculateTotalQuantity(): void {
+    this.totalQuantity = this.cartProducts.reduce(
+      (count, product) => product.count + count,
+      0
+    );
+  }
+
+  private calculateTotalSum(): void {
+    this.totalSum = this.cartProducts.reduce(
       (amount, product) => amount + product.price * product.count,
       0
     );

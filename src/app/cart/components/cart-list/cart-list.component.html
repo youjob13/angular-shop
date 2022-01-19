@@ -1,16 +1,18 @@
 <h2 class="title">Cart</h2>
 
 <div class="information">
-  <p class="information-block"><strong>Number of goods:</strong> <span>{{goodsNumber}}</span></p>
-  <p class="information-block"><strong>Amount of purchased goods:</strong> <span>{{amountOfPurchasedGoods}}</span></p>
+  <p class="information-block"><strong>Number of goods:</strong> <span>{{totalQuantity}}</span></p>
+  <p class="information-block"><strong>Amount of purchased goods:</strong> <span>{{totalSum}}</span></p>
 </div>
 
-<ul *ngIf='cartList.length; else elseBlock'>
-  <li *ngFor='let product of cartList; trackBy: trackByProductId'>
+<button (click)='clearCart()'>Clear cart</button>
+
+<ul *ngIf='isEmptyCart; else elseBlock'>
+  <li *ngFor='let product of cartProducts; trackBy: trackByProductId'>
     <app-cart-item
       [product]='product'
-      (changeGoodsNumber)='changeProductCount($event)'
-      (removeProductFromCart)='removeProductFromCart($event)'></app-cart-item>
+      (changeProductQuantity)='onChangeProductQuantity($event)'
+      (removeProductFromCart)='onRemoveProductFromCart($event)'></app-cart-item>
   </li>
 </ul>
 
