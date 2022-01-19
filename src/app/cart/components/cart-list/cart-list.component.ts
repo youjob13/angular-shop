@@ -1,31 +1,39 @@
-import { AfterContentChecked, Component, OnInit } from '@angular/core';
+import { AfterContentChecked, Component } from '@angular/core';
 import { CartListService } from '../../services/cart-list.service';
-import { IPurchasedProduct } from '../../cart.model';
+import { ChangedProductCount, IPurchasedProduct } from '../../cart.model';
 
 @Component({
   selector: 'app-cart-list',
   templateUrl: './cart-list.component.html',
-  styleUrls: ['./cart-list.component.scss', '../../../app.component.scss'],
+  styleUrls: ['./cart-list.component.scss'],
 })
 export class CartListComponent implements AfterContentChecked {
-  cartList: IPurchasedProduct[] = [];
-  goodsNumber: number = 0;
-  amountOfPurchasedGoods: number = 0;
+  cartProducts: IPurchasedProduct[] = [];
+  totalQuantity: number = 0;
+  totalSum: number = 0;
+  isEmptyCart: boolean = false;
 
   constructor(private cartListService: CartListService) {}
 
   ngAfterContentChecked(): void {
-    this.cartList = this.cartListService.getCartList();
-    this.goodsNumber = this.cartListService.calculateProductsNumber();
-    this.amountOfPurchasedGoods =
-      this.cartListService.calculateAmountOfPurchasedGoods();
+    this.cartProducts = this.cartListService.getProducts();
+    this.isEmptyCart = this.cartListService.isEmptyCart();
+    this.totalQuantity = this.cartListService.totalQuantity;
+    this.totalSum = this.cartListService.totalSum;
   }
 
-  changeProductCount(product: IPurchasedProduct): void {
-    this.cartListService.changeProductCount(product);
+  onChangeProductQuantity({
+    productId,
+    productCount,
+  }: ChangedProductCount): void {
+    this.cartListService.changeQuantity(productId, productCount);
   }
 
-  removeProductFromCart(productId: string): void {
+  clearCart(): void {
+    this.cartListService.removeAllProducts();
+  }
+
+  onRemoveProductFromCart(productId: string): void {
     console.log(productId);
     this.cartListService.removeProduct(productId);
   }

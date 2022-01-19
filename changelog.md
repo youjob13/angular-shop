@@ -1,3 +1,17 @@
+## [0.0.3] - 2022-01-11
+
+### Added
+
+- modify CartService,
+- add ConfigOptionsService,
+- add ConstantsService,
+- add GeneratorService,
+- add GeneratorFactory
+- add genID
+- add LocalStorageService
+- inject all new services at First component
+- add EnlargeFontSizeDirective
+
 ## [0.0.2] - 2022-01-11
 
 ### Added
@@ -18,5 +32,6 @@
 - a little layout
 - first component
 
+[0.0.3]: https://github.com/youjob13/angular-shop/compare/feat/task-2...feat/task-3
 [0.0.2]: https://github.com/youjob13/angular-shop/compare/feat/task-1...feat/task-2
 [0.0.1]: https://github.com/youjob13/angular-shop/compare/feat/task-1...master
