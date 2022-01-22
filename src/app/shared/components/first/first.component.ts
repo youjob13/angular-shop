@@ -1,27 +1,13 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  Input,
-  Optional,
-  Self,
-} from '@angular/core';
 import { ConfigOptionsService } from 'src/app/core/services/config-options.service';
 import {
-  CONSTANTS,
-  ConstantsService,
-  ConstantsServiceType,
+    CONSTANTS, ConstantsService, ConstantsServiceType
 } from 'src/app/core/services/constant.service';
 import { GeneratorService } from 'src/app/core/services/generator';
-import {
-  GENERATED_STRING,
-  GeneratorFactory,
-} from 'src/app/core/services/generator.factory';
-import {
-  LocalStorageService,
-  LOCAL_STORAGE,
-  localStorageService,
-} from 'src/app/core/services/local-storage.service';
+import { GENERATED_STRING, GeneratorFactory } from 'src/app/core/services/generator.factory';
+import { LocalStorageService } from 'src/app/core/services/local-storage.service';
+
+import { ChangeDetectionStrategy, Component, Inject, Input, Optional, Self } from '@angular/core';
+
 import { Category } from '../../models/product.model';
 
 @Component({
@@ -33,7 +19,7 @@ import { Category } from '../../models/product.model';
     ConfigOptionsService,
     GeneratorService,
     { provide: CONSTANTS, useValue: ConstantsService },
-    { provide: LOCAL_STORAGE, useValue: localStorageService },
+    { provide: LocalStorageService, useValue: window.localStorage },
     {
       provide: GENERATED_STRING,
       useFactory: GeneratorFactory(14),
@@ -63,7 +49,7 @@ export class FirstComponent {
     @Self()
     @Optional()
     private generatedString: string,
-    @Inject(LOCAL_STORAGE)
+    @Inject(LocalStorageService)
     @Self()
     @Optional()
     private localStorageService: LocalStorageService
@@ -78,11 +64,11 @@ export class FirstComponent {
 
     console.log('GeneratedString', this.generatedString);
 
-    this.localStorageService?.setValue('test', 'Test value');
+    this.localStorageService.setItem('test', 'Test value');
 
     console.log(
       'LocalStorageService',
-      this.localStorageService?.getValue('test')
+      this.localStorageService.getItem('test')
     );
 
     return this.isAvailable ? 'Yes' : 'No';
