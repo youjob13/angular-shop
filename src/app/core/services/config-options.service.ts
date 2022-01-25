@@ -7,7 +7,9 @@ export class ConfigOptionsService implements ConfigModel {
 
   constructor() {}
 
-  setConfig(data: ConfigData, otherProperties: Partial<ConfigModel>): void {}
+  setConfig(data: ConfigData, otherProperties: Partial<ConfigModel>): void {
+    // ?
+  }
 
   getConfig(): ConfigData {
     return this.config;
