@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
 import { IProduct } from 'src/app/shared/models/product.model';
+
+import { Injectable } from '@angular/core';
+
 import { IPurchasedProduct } from '../cart.model';
 
 const initialProductCount = 1;
@@ -66,8 +68,6 @@ export class CartListService {
     } else {
       this.changeQuantity(currentProduct.id, currentProduct.count + 1);
     }
-
-    console.log(this.cartProducts);
   }
 
   changeQuantity(productId: string, productCount: number): void {

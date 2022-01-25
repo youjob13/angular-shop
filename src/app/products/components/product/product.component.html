@@ -2,7 +2,7 @@
   <app-first
     [name]='product.name'
     [description]='product.description'
-    [price]='product.price'
+    [price]='product.price | currency'
     [category]='product.category'
     [isAvailable]='product.isAvailable'
   ></app-first>

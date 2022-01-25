@@ -1,3 +1,14 @@
+## [0.0.4] - 2022-01-24
+
+### Added
+
+- add "uppercase" pipe to app.component,
+- add "currency" pipe to cart-item.component,
+- add "uppercase", "currency", "orderBy" pipes to cart-list.component,
+- add "currency" pipe to product.component,
+- add "uppercase", "async" pipes to product-list.component,
+- create orderPipe
+
 ## [0.0.3] - 2022-01-11
 
 ### Added
@@ -32,6 +43,7 @@
 - a little layout
 - first component
 
+[0.0.4]: https://github.com/youjob13/angular-shop/compare/feat/task-3...feat/task-4
 [0.0.3]: https://github.com/youjob13/angular-shop/compare/feat/task-2...feat/task-3
 [0.0.2]: https://github.com/youjob13/angular-shop/compare/feat/task-1...feat/task-2
 [0.0.1]: https://github.com/youjob13/angular-shop/compare/feat/task-1...master

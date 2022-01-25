@@ -30,7 +30,7 @@ import { Category } from '../../models/product.model';
 export class FirstComponent {
   @Input() name!: string;
   @Input() description!: string;
-  @Input() price!: number;
+  @Input() price: string | null = null;
   @Input() category!: Category;
   @Input() isAvailable!: boolean;
 

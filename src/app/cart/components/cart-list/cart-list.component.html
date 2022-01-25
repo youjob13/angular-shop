@@ -1,18 +1,34 @@
-<h2 class="title">Cart</h2>
+<h2 class="title">{{ "Cart" | uppercase }}</h2>
 
 <div class="information">
-  <p class="information-block"><strong>Number of goods:</strong> <span>{{totalQuantity}}</span></p>
-  <p class="information-block"><strong>Amount of purchased goods:</strong> <span>{{totalSum}}</span></p>
+  <p class="information-block">
+    <strong>Number of goods:</strong> <span>{{ totalQuantity }}</span>
+  </p>
+  <p class="information-block">
+    <strong>Amount of purchased goods:</strong>
+    <span>{{ totalSum | currency }}</span>
+  </p>
 </div>
 
-<button (click)='clearCart()'>Clear cart</button>
+<button (click)="clearCart()">Clear cart</button>
 
-<ul *ngIf='isEmptyCart; else elseBlock'>
-  <li *ngFor='let product of cartProducts; trackBy: trackByProductId'>
-    <app-cart-item
-      [product]='product'
-      (changeProductQuantity)='onChangeProductQuantity($event)'
-      (removeProductFromCart)='onRemoveProductFromCart($event)'></app-cart-item>
+<select [(ngModel)]="sortBy">
+  <option *ngFor="let option of sortOptions" [value]="option">
+    {{ option }}
+  </option>
+</select>
+
+<div>
+  <strong>Sort by:</strong>
+  <span>{{ sortBy }}</span>
+</div>
+
+<label><input type="checkbox" [(ngModel)]="isAsc" />{{!isAsc ? "ASC" : "DESC"}}</label>
+
+<ul *ngIf="isEmptyCart; else elseBlock">
+  <li *ngFor="let product of cartProducts | orderBy: sortBy: isAsc; trackBy: trackByProductId">
+    <app-cart-item [product]="product" (changeProductQuantity)="onChangeProductQuantity($event)"
+      (removeProductFromCart)="onRemoveProductFromCart($event)"></app-cart-item>
   </li>
 </ul>
 
