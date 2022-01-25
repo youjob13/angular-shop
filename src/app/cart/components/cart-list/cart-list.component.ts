@@ -1,6 +1,7 @@
 import { AfterContentChecked, Component } from '@angular/core';
-import { CartListService } from '../../services/cart-list.service';
+
 import { ChangedProductCount, IPurchasedProduct } from '../../cart.model';
+import { CartListService } from '../../services/cart-list.service';
 
 @Component({
   selector: 'app-cart-list',
@@ -12,6 +13,9 @@ export class CartListComponent implements AfterContentChecked {
   totalQuantity: number = 0;
   totalSum: number = 0;
   isEmptyCart: boolean = false;
+  isAsc: boolean = false;
+  sortBy: string | null = null;
+  sortOptions: string[] = ['price', 'count', 'name'];
 
   constructor(private cartListService: CartListService) {}
 
@@ -34,7 +38,6 @@ export class CartListComponent implements AfterContentChecked {
   }
 
   onRemoveProductFromCart(productId: string): void {
-    console.log(productId);
     this.cartListService.removeProduct(productId);
   }
 

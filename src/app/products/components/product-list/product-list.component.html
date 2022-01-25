@@ -1,11 +1,9 @@
-<h2 class="title">Products</h2>
+<h2 class="title">{{'Products' | uppercase}}</h2>
 <ol>
-  <li *ngFor='let product of products'>
+  <li *ngFor='let product of productService.getProducts() | async'>
       <app-product
       (addProductToCart)="addProductToCart($event)"
         [product]=product
       ></app-product>
   </li>
 </ol>
-
-

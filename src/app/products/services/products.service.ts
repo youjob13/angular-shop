@@ -1,4 +1,7 @@
+import { Observable, of } from 'rxjs';
+
 import { Injectable } from '@angular/core';
+
 import { Category, IProduct } from '../../shared/models/product.model';
 
 @Injectable({
@@ -8,7 +11,7 @@ export class ProductsService {
   private products: IProduct[] = [
     {
       id: '1',
-      name: 'IPhone 13',
+      name: 'iPhone 13',
       description: 'Beautiful design',
       price: 1000,
       category: Category.SMARTPHONE,
@@ -18,7 +21,7 @@ export class ProductsService {
       id: '2',
       name: 'MSI sx109',
       description: 'The best laptop 2021',
-      price: 2300,
+      price: 500,
       category: Category.LAPTOP,
       isAvailable: true,
     },
@@ -32,17 +35,25 @@ export class ProductsService {
     },
     {
       id: '4',
-      name: 'Apple watch',
+      name: 'Bpple watch',
       description: 'Beautiful design',
       price: 500,
       category: Category.OTHER,
+      isAvailable: true,
+    },
+    {
+      id: '5',
+      name: 'Apple watch',
+      description: 'Incredible machine',
+      price: 500,
+      category: Category.LAPTOP,
       isAvailable: true,
     },
   ];
 
   constructor() {}
 
-  getProducts(): IProduct[] {
-    return this.products;
+  getProducts(): Observable<IProduct[]> {
+    return of(this.products);
   }
 }
