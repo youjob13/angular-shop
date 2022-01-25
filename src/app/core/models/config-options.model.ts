@@ -1,5 +1,5 @@
 export interface ConfigModel {
-  setConfig(data: ConfigData, otherProperties: ConfigModel): void;
+  setConfig(configUpdates: ConfigModel): void;
   getConfig(): ConfigData;
 }
 

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { ConfigData, ConfigModel } from '../models/config-options.model';
 
 @Injectable()
@@ -7,7 +8,9 @@ export class ConfigOptionsService implements ConfigModel {
 
   constructor() {}
 
-  setConfig(data: ConfigData, otherProperties: Partial<ConfigModel>): void {}
+  setConfig(configUpdates: Partial<ConfigModel>): void {
+    this.config = { ...this.config, ...configUpdates };
+  }
 
   getConfig(): ConfigData {
     return this.config;
