@@ -4,8 +4,12 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'orderBy',
 })
 export class OrderByPipe implements PipeTransform {
-  transform(value: any[], ...args: any[]): any[] {
+  transform(value: any[] | null, ...args: any[]): any[] {
     const [key, isAsc] = args;
+
+    if (value == null) {
+      return [];
+    }
 
     if (key == null) {
       return value;

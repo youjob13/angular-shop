@@ -20,7 +20,11 @@ export class CartItemComponent {
   @Output() removeProductFromCart: EventEmitter<string> =
     new EventEmitter<string>();
 
-  constructor() {}
+  get productQuantity(): number {
+    return this.product.count > this.product.quantity
+      ? this.product.quantity
+      : this.product.count;
+  }
 
   onChangeGoodsNumber(event: Event): void {
     const target = event.target as HTMLInputElement;

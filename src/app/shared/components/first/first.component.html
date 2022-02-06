@@ -1,22 +1,26 @@
-<div fontSize='1.5rem' class='first' *ngIf='name'>
+<div fontSize="1.5rem" class="first" *ngIf="name">
   <p>
     <strong>Name:</strong>
-    <span>{{name}}</span>
+    <span>{{ name }}</span>
   </p>
   <p>
     <strong>Description:</strong>
-    <span>{{description}}</span>
+    <span>{{ description }}</span>
   </p>
   <p>
     <strong>Price:</strong>
-    <span>{{price}}</span>
+    <span>{{ price }}</span>
   </p>
   <p>
     <strong>Category:</strong>
-    <span>{{category}}</span>
+    <span>{{ category }}</span>
   </p>
   <p>
     <strong>Available:</strong>
-    <span>{{getProductStatus()}}</span>
+    <span>{{ getProductStatus() }}</span>
+  </p>
+  <p>
+    <strong>Quantity:</strong>
+    <span>{{ quantity }}</span>
   </p>
 </div>

@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-import { FirstComponent } from './components/first/first.component';
-import { EnlargeFontSizeDirective } from './directives/englarge-font-size';
-import { HighlightDirective } from './directives/highlight.directive';
-import { OrderByPipe } from './pipes/order-by.pipe';
+import { FirstComponent, LoaderComponent } from './components';
+import { EnlargeFontSizeDirective, HighlightDirective } from './directives';
+import { OrderByPipe } from './pipes';
 
 @NgModule({
   declarations: [
@@ -13,6 +11,7 @@ import { OrderByPipe } from './pipes/order-by.pipe';
     HighlightDirective,
     EnlargeFontSizeDirective,
     OrderByPipe,
+    LoaderComponent,
   ],
   exports: [
     CommonModule,
@@ -21,6 +20,7 @@ import { OrderByPipe } from './pipes/order-by.pipe';
     HighlightDirective,
     EnlargeFontSizeDirective,
     OrderByPipe,
+    LoaderComponent,
   ],
   imports: [CommonModule],
 })

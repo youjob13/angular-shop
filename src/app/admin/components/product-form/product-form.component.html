@@ -1,0 +1,26 @@
+<form class="form" [formGroup]="productForm" (submit)="onSave()">
+  <div class="text-content">
+    <label>Name:</label>
+    <input formControlName="name" type="text" />
+    <label>Description: </label>
+    <input formControlName="description" type="text" />
+    <label>Category:</label>
+    <select formControlName="category">
+      <option *ngFor="let category of categories" [value]="category">
+        {{ category }}
+      </option>
+    </select>
+    <label>Price:</label>
+    <input formControlName="price" type="number" />
+    <label>Quantity:</label>
+    <input formControlName="quantity" type="number" />
+  </div>
+
+  <div>
+    <input type="file" (change)="onFileChange($event)" />
+    <input type="hidden" formControlName="imageUrl" />
+  </div>
+
+  <button type="submit" [disabled]="productForm.invalid">Save</button>
+  <button type="button" (click)="onGoBack()">Cancel</button>
+</form>

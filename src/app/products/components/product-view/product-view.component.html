@@ -1,0 +1,14 @@
+<div class="product" *ngIf="product">
+  <h5>{{ product.name }}</h5>
+  <div class="image-wrapper">
+    <img
+      class="image"
+      [src]="product.imageUrl"
+      [alt]="product?.imageAlt || ''"
+    />
+  </div>
+  <p>{{ product.description }}</p>
+  <p>{{ product.price }}</p>
+
+  <button *ngIf="product.quantity" (click)="onBuyProduct()">Buy</button>
+</div>

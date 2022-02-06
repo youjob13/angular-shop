@@ -1,37 +1,62 @@
 <h2 class="title">{{ "Cart" | uppercase }}</h2>
 
-<div class="information">
-  <p class="information-block">
-    <strong>Number of goods:</strong> <span>{{ totalQuantity }}</span>
-  </p>
-  <p class="information-block">
-    <strong>Amount of purchased goods:</strong>
-    <span>{{ totalSum | currency }}</span>
-  </p>
-</div>
+<ng-container *ngIf="!(cartListService.loading$ | async); else loader">
+  <a routerLink="/orders">Go to orders</a>
 
-<button (click)="clearCart()">Clear cart</button>
+  <div class="controls">
+    <select [(ngModel)]="sortBy">
+      <option *ngFor="let option of sortOptions" [value]="option">
+        {{ option }}
+      </option>
+    </select>
 
-<select [(ngModel)]="sortBy">
-  <option *ngFor="let option of sortOptions" [value]="option">
-    {{ option }}
-  </option>
-</select>
+    <div>
+      <strong>Sort by:</strong>
+      <span>{{ sortBy }}</span>
+    </div>
 
-<div>
-  <strong>Sort by:</strong>
-  <span>{{ sortBy }}</span>
-</div>
+    <label
+      ><input type="checkbox" [(ngModel)]="isAsc" />{{
+        !isAsc ? "ASC" : "DESC"
+      }}</label
+    >
 
-<label><input type="checkbox" [(ngModel)]="isAsc" />{{!isAsc ? "ASC" : "DESC"}}</label>
+    <button (click)="clearCart()">Clear cart</button>
+  </div>
 
-<ul *ngIf="isEmptyCart; else elseBlock">
-  <li *ngFor="let product of cartProducts | orderBy: sortBy: isAsc; trackBy: trackByProductId">
-    <app-cart-item [product]="product" (changeProductQuantity)="onChangeProductQuantity($event)"
-      (removeProductFromCart)="onRemoveProductFromCart($event)"></app-cart-item>
-  </li>
-</ul>
+  <div class="information">
+    <p class="information-block">
+      <strong>Number of goods:</strong>
+      <span>{{ cartListService.totalQuantity$ | async }}</span>
+    </p>
+    <p class="information-block">
+      <strong>Amount of purchased goods:</strong>
+      <span>{{ cartListService.totalSum$ | async | currency }}</span>
+    </p>
+  </div>
 
-<ng-template #elseBlock>
-  <p>Cart is empty :(</p>
+  <ul *ngIf="cartListService.isEmptyCart() | async; else elseBlock">
+    <li
+      *ngFor="
+        let product of cartListService.cartProducts$
+          | async
+          | orderBy: sortBy:isAsc;
+        trackBy: trackByProductId
+      "
+    >
+      <app-cart-item
+        [product]="product"
+        (changeProductQuantity)="onChangeProductQuantity($event)"
+        (removeProductFromCart)="onRemoveProductFromCart($event)"
+      ></app-cart-item>
+    </li>
+  </ul>
+
+  <ng-template #elseBlock>
+    <p>Cart is empty :(</p>
+  </ng-template>
+</ng-container>
+
+<ng-template #loader>
+  <app-loader class="loader"></app-loader>
 </ng-template>

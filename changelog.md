@@ -1,3 +1,25 @@
+## [0.0.5] - 2022-02-06
+
+### Added
+
+Routing;
+
+- add /products-list route (start page),
+- add ProductViewComponent, /product/:ID route,
+- add /cart route (with laze module),
+- add ProcessOrderComponent with CanLoad & CanActivate guards (with laze module),
+- add admin panel (with laze module),
+  - /admin route + CanActivate Guard,
+  - /admin/products route,
+  - /admin/product/add route,
+  - /admin/product/edit/:ID route + resolve & CanDeactivate guards,
+  - /admin/orders route,
+- store products and cartProducts to localStorage,
+
+Additional functionality:
+
+- secondary route-outlet "details"
+
 ## [0.0.4] - 2022-01-24
 
 ### Added
@@ -43,7 +65,8 @@
 - a little layout
 - first component
 
-[0.0.4]: https://github.com/youjob13/angular-shop/compare/feat/task-3...feat/task-4
+[0.0.5]: https://github.com/youjob13/angular-shop/compare/feat/task-4...feat/task-5
+[0.0.4]: https://github.com/youjob13/angular-shop/compare/feat/task-3...feat/task-3
 [0.0.3]: https://github.com/youjob13/angular-shop/compare/feat/task-2...feat/task-3
 [0.0.2]: https://github.com/youjob13/angular-shop/compare/feat/task-1...feat/task-2
 [0.0.1]: https://github.com/youjob13/angular-shop/compare/feat/task-1...master

@@ -1,0 +1,16 @@
+<button routerLink="/admin/product/add">Add new product</button>
+<hr />
+
+<ul>
+  <li *ngFor="let product of productsService.products$ | async">
+    <app-first
+      [name]="product.name"
+      [description]="product.description"
+      [price]="product.price | currency"
+      [category]="product.category"
+      [isAvailable]="product.isAvailable"
+      [quantity]="product.quantity"
+    ></app-first>
+    <button (click)="onEditProduct(product)">edit</button>
+  </li>
+</ul>
