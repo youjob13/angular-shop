@@ -1,11 +1,16 @@
 <div class="product">
-  <app-first
-    [name]='product.name'
-    [description]='product.description'
-    [price]='product.price | currency'
-    [category]='product.category'
-    [isAvailable]='product.isAvailable'
-  ></app-first>
+  <a [routerLink]="['/product', product.id]">
+    <app-first
+      [name]="product.name"
+      [description]="product.description"
+      [price]="product.price | currency"
+      [category]="product.category"
+      [isAvailable]="product.isAvailable"
+      [quantity]="product.quantity"
+    ></app-first>
+  </a>
 
-  <button *ngIf="product.isAvailable" class="button" (click)='onAddToCart()'>Buy</button>
+  <button *ngIf="product.quantity" class="button" (click)="onAddToCart()">
+    Buy
+  </button>
 </div>

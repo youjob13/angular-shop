@@ -1,12 +1,24 @@
 import { ConfigOptionsService } from 'src/app/core/services/config-options.service';
 import {
-    CONSTANTS, ConstantsService, ConstantsServiceType
+  CONSTANTS,
+  ConstantsService,
+  ConstantsServiceType,
 } from 'src/app/core/services/constant.service';
 import { GeneratorService } from 'src/app/core/services/generator';
-import { GENERATED_STRING, GeneratorFactory } from 'src/app/core/services/generator.factory';
+import {
+  GENERATED_STRING,
+  GeneratorFactory,
+} from 'src/app/core/services/generator.factory';
 import { LocalStorageService } from 'src/app/core/services/local-storage.service';
 
-import { ChangeDetectionStrategy, Component, Inject, Input, Optional, Self } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  Input,
+  Optional,
+  Self,
+} from '@angular/core';
 
 import { Category } from '../../models/product.model';
 
@@ -33,6 +45,7 @@ export class FirstComponent {
   @Input() price: string | null = null;
   @Input() category!: Category;
   @Input() isAvailable!: boolean;
+  @Input() quantity!: number;
 
   constructor(
     @Self()
@@ -56,20 +69,20 @@ export class FirstComponent {
   ) {}
 
   getProductStatus(): string {
-    console.log('ConfigOptionsService', this.configOptionsService.getConfig());
+    // console.log('ConfigOptionsService', this.configOptionsService.getConfig());
 
-    console.log('GeneratorService', this.generatorService.getNewID());
+    // console.log('GeneratorService', this.generatorService.getNewID());
 
-    console.log('ConstantsService', this.constantsService);
+    // console.log('ConstantsService', this.constantsService);
 
-    console.log('GeneratedString', this.generatedString);
+    // console.log('GeneratedString', this.generatedString);
 
-    this.localStorageService.setItem('test', 'Test value');
+    // this.localStorageService.setItem('test', 'Test value');
 
-    console.log(
-      'LocalStorageService',
-      this.localStorageService.getItem('test')
-    );
+    // console.log(
+    //   'LocalStorageService',
+    //   this.localStorageService.getItem('test')
+    // );
 
     return this.isAvailable ? 'Yes' : 'No';
   }

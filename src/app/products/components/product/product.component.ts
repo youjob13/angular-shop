@@ -21,7 +21,6 @@ export class ProductComponent {
   constructor() {}
 
   onAddToCart(): void {
-    console.log('Product purchased');
     this.addProductToCart.emit(this.product);
   }
 }

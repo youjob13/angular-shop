@@ -1,11 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,900&display=swap");
+
 $black-color: #000;
 $light-color: #fff;
 $dark-gray-color: darkslategrey;
 $blue-color: rgb(78, 156, 233);
 $blue-color: rgb(78, 156, 233);
 
-@mixin title() {
-  font-size: 2rem;
+$base-font-size: 16px;
+$base-font-family: "Roboto", sans-serif;
+
+@mixin title($size) {
+  font-size: $size;
+  font-family: $base-font-family;
   border-bottom: 0.13rem solid $black-color;
   margin-bottom: 1.8rem;
 }
@@ -24,6 +30,11 @@ $blue-color: rgb(78, 156, 233);
   justify-content: space-between;
 }
 
+@mixin base-text() {
+  font-size: $base-font-size;
+  font-family: $base-font-family;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -40,8 +51,7 @@ ul {
 }
 
 .wrapper {
-  display: grid;
-  grid-template-columns: 3fr 2fr;
+  position: relative;
   max-width: 85%;
   margin: 0 auto;
 
@@ -69,10 +79,12 @@ ul {
 }
 
 .title {
-  @include title;
+  @include title(2rem);
+
   text-align: center;
   text-transform: capitalize;
   color: $dark-gray-color;
+  cursor: pointer;
 }
 
 .subtitle {
@@ -84,4 +96,41 @@ ul {
   @include btn;
   background-color: $blue-color;
   color: $light-color;
+}
+
+.active-link {
+  background-color: rgb(230, 230, 230);
+  text-transform: uppercase;
+}
+
+.nav {
+  &-list {
+    @include flex-row;
+
+    max-width: max-content;
+    column-gap: 1rem;
+  }
+
+  &-item {
+    @include base-text;
+  }
+}
+
+.details {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 50rem;
+  padding: 2rem 1rem;
+
+  background-color: rgb(0, 0, 0);
+  filter: blur(0.8);
+  opacity: 0.95;
+  color: #fff;
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
 }

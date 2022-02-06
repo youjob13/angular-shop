@@ -1,30 +1,18 @@
-import { AfterContentChecked, Component } from '@angular/core';
-
-import { ChangedProductCount, IPurchasedProduct } from '../../cart.model';
+import { Component } from '@angular/core';
 import { CartListService } from '../../services/cart-list.service';
+import { ChangedProductCount, IPurchasedProduct } from '../../cart.model';
 
 @Component({
   selector: 'app-cart-list',
   templateUrl: './cart-list.component.html',
   styleUrls: ['./cart-list.component.scss'],
 })
-export class CartListComponent implements AfterContentChecked {
-  cartProducts: IPurchasedProduct[] = [];
-  totalQuantity: number = 0;
-  totalSum: number = 0;
-  isEmptyCart: boolean = false;
+export class CartListComponent {
   isAsc: boolean = false;
   sortBy: string | null = null;
   sortOptions: string[] = ['price', 'count', 'name'];
 
-  constructor(private cartListService: CartListService) {}
-
-  ngAfterContentChecked(): void {
-    this.cartProducts = this.cartListService.getProducts();
-    this.isEmptyCart = this.cartListService.isEmptyCart();
-    this.totalQuantity = this.cartListService.totalQuantity;
-    this.totalSum = this.cartListService.totalSum;
-  }
+  constructor(public cartListService: CartListService) {}
 
   onChangeProductQuantity({
     productId,

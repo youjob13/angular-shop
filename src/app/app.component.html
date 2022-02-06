@@ -1,5 +1,25 @@
-<h1 class="title" #appTitle></h1>
-<div class="wrapper">
-  <app-product-list class="products"></app-product-list>
-  <app-cart-list class="cart"></app-cart-list>
+<h1 class="title" routerLink="/" #appTitle></h1>
+
+<button (click)="onToggleDetails()" class="details-btn">News</button>
+
+<nav>
+  <ul class="nav-list">
+    <li class="nav-item" routerLinkActive="active-link">
+      <a routerLink="/products-list">Products</a>
+    </li>
+    <li routerLinkActive="active-link">
+      <a routerLink="/cart-list">Cart</a>
+    </li>
+    <li routerLinkActive="active-link">
+      <a routerLink="/admin">Admin</a>
+    </li>
+  </ul>
+</nav>
+
+<div class="wrapper" [@routeAnimation]="prepareRoute(outlet)">
+  <router-outlet #outlet="outlet"></router-outlet>
+</div>
+
+<div class="details" [@detailsAnimation]="detailsAnimState">
+  <router-outlet name="details"></router-outlet>
 </div>
