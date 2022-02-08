@@ -18,6 +18,8 @@ export class CanDeactivateGuard
     | UrlTree
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree> {
-    return component.canDeactivate ? component.canDeactivate() : true;
+    // return component.canDeactivate ? component.canDeactivate() : true;
+    // так немножко короче
+    return component.canDeactivate?.() ?? true;
   }
 }

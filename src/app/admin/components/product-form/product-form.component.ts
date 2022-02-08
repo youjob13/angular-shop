@@ -69,6 +69,9 @@ export class ProductFormComponent implements OnInit, CanComponentDeactivate {
       .subscribe((product: IProduct) => {
         this.initialProduct = product;
 
+        // можно воспользоваться таким методом, может быть код будет меньше
+        // this.productForm.setValue()/patchValue();
+
         this.productForm.controls.name.setValue(product.name || '');
         this.productForm.controls.description.setValue(
           product.description || ''
