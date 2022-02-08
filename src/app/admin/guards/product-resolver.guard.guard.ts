@@ -36,7 +36,7 @@ export class ProductResolverGuard implements Resolve<Partial<IProduct>> {
       quantity: 0,
     } as Partial<IProduct>;
 
-    if (id == null) {
+    if (id == null) { // желательно использовать ===, чтобы не происходило неявного преобразования типов
       return of(billetProduct);
     }
 
