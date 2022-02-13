@@ -4,7 +4,7 @@
   <a routerLink="/orders">Go to orders</a>
 
   <div class="controls">
-    <select [(ngModel)]="sortBy">
+    <select [formControl]="sortByControl">
       <option *ngFor="let option of sortOptions" [value]="option">
         {{ option }}
       </option>
@@ -16,7 +16,7 @@
     </div>
 
     <label
-      ><input type="checkbox" [(ngModel)]="isAsc" />{{
+      ><input type="checkbox" [formControl]="isAscControl" />{{
         !isAsc ? "ASC" : "DESC"
       }}</label
     >

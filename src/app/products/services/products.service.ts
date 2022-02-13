@@ -1,17 +1,8 @@
 import { IProduct } from '../../shared/models/product.model';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import {
-  delay,
-  distinctUntilChanged,
-  finalize,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs/operators';
-import { LocalStorageService } from 'src/app/core';
 
 import { Inject, Injectable } from '@angular/core';
 
+import { ProductsPromiseService } from './products-promise.service';
 import { CartListService } from 'src/app/cart/services/cart-list.service';
 import { GENERATOR_ID_TOKEN } from '../products.module';
 
@@ -19,86 +10,79 @@ import { GENERATOR_ID_TOKEN } from '../products.module';
   providedIn: 'root',
 })
 export class ProductsService {
-  private products$$ = new BehaviorSubject<IProduct[]>([]);
-  public products$!: Observable<IProduct[]>;
-
-  private loading$$ = new BehaviorSubject<boolean>(false);
-  public loading$!: Observable<boolean>;
+  public products!: IProduct[];
+  public loading = false;
 
   constructor(
     @Inject(GENERATOR_ID_TOKEN) private generatorFunc: (n: number) => string,
-    private localStorageService: LocalStorageService,
+    private productsPromiseService: ProductsPromiseService,
     private cartService: CartListService
-  ) {
-    this.loadProducts();
+  ) {}
 
-    this.products$ = this.products$$.asObservable();
-    this.loading$ = this.loading$$.pipe(distinctUntilChanged());
+  async getProducts(): Promise<IProduct[]> {
+    try {
+      this.loading = true;
+
+      if (this.products?.length) {
+        return Promise.resolve(this.products);
+      }
+
+      const products = await this.productsPromiseService.loadProduct();
+      this.products = [...products];
+      return products;
+    } catch (err) {
+      console.error(err);
+      throw new Error();
+    } finally {
+      this.loading = false;
+    }
   }
 
-  private loadProducts(): void {
-    this.loading$$.next(true);
+  getProduct(id: string): IProduct | undefined {
+    return this.products.find((product) => product.id === id);
+  }
 
-    of(this.localStorageService.getItem('products'))
-      .pipe(
-        delay(1000),
-        take(1),
-        finalize(() => this.loading$$.next(false))
-      )
-      .subscribe((products) =>
-        this.products$$.next(
-          products ? (JSON.parse(products) as IProduct[]) : []
-        )
+  async addProduct(productData: IProduct): Promise<void> {
+    try {
+      const id = this.generatorFunc(32);
+
+      const newProduct = {
+        ...productData,
+        id,
+      };
+
+      const newProductFromApi = await this.productsPromiseService.addProduct(
+        newProduct
       );
+
+      this.products = [...this.products, newProductFromApi];
+    } catch (err) {
+      console.error(err);
+    }
   }
 
-  getProduct(id: string): Observable<IProduct | undefined> {
-    return this.products$.pipe(
-      switchMap((products) => of(products.find((product) => product.id === id)))
-    );
-  }
+  async updateProduct(
+    productToUpdate: IProduct,
+    updates: Partial<IProduct>
+  ): Promise<void> {
+    try {
+      const updatedProduct = {
+        ...productToUpdate,
+        ...updates,
+      };
 
-  addProduct(productData: IProduct): void {
-    const id = this.generatorFunc(32);
+      const updatedProductFromApi =
+        await this.productsPromiseService.updateProduct(updatedProduct);
 
-    const newProduct = {
-      ...productData,
-      id,
-    };
+      this.cartService.updateProducts(updatedProductFromApi);
 
-    this.products$$
-      .pipe(
-        take(1),
-        tap((products) => {
-          const updatedProducts = [...products, newProduct];
-
-          this.localStorageService.setItem('products', updatedProducts);
-          return this.products$$.next(updatedProducts);
-        })
-      )
-      .subscribe(() => this.loadProducts());
-  }
-
-  updateProduct(productToUpdate: IProduct, updates: Partial<IProduct>): void {
-    const updatedProduct = {
-      ...productToUpdate,
-      ...updates,
-    };
-
-    this.products$$
-      .pipe(
-        take(1),
-        tap((products) => {
-          const updatedProducts = products.map((product) =>
-            product.id === updatedProduct.id ? updatedProduct : product
-          );
-
-          this.cartService.updateProducts(updatedProduct);
-
-          this.localStorageService.setItem('products', updatedProducts);
-          return this.products$$.next(updatedProducts);
-        })
-      )
-      .subscribe(() => this.loadProducts());
+      this.products = this.products.map((product) =>
+        product.id === updatedProductFromApi.id
+          ? updatedProductFromApi
+          : product
+      );
+    } catch (err) {
+      console.error(err);
+    }
   }
 }

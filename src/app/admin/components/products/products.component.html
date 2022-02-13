@@ -1,8 +1,8 @@
 <button routerLink="/admin/product/add">Add new product</button>
 <hr />
 
-<ul>
-  <li *ngFor="let product of productsService.products$ | async">
+<ul *ngIf="!productsService.loading; else loader">
+  <li *ngFor="let product of products">
     <app-first
       [name]="product.name"
       [description]="product.description"
@@ -14,3 +14,7 @@
     <button (click)="onEditProduct(product)">edit</button>
   </li>
 </ul>
+
+<ng-template #loader>
+  <app-loader class="loader"></app-loader>
+</ng-template>

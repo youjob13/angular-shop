@@ -1,17 +1,19 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, throwError } from 'rxjs';
 import {
+  catchError,
   delay,
   distinctUntilChanged,
   finalize,
   map,
+  switchMap,
   take,
   tap,
 } from 'rxjs/operators';
-import { LocalStorageService } from 'src/app/core';
 import { IProduct } from 'src/app/shared/models/product.model';
 
 import { IPurchasedProduct } from '../cart.model';
+import { CartObservableService } from './cart-observable.service';
 
 const initialProductCount = 1;
 
@@ -31,7 +33,7 @@ export class CartListService {
   private loading$$ = new BehaviorSubject<boolean>(false);
   public loading$!: Observable<boolean>;
 
-  constructor(private localStorageService: LocalStorageService) {
+  constructor(private cartObservableService: CartObservableService) {
     this.loadProducts();
 
     this.cartProducts$ = this.cartProducts$$.asObservable();
@@ -40,48 +42,74 @@ export class CartListService {
     this.loading$ = this.loading$$.pipe(distinctUntilChanged());
   }
 
-  loadProducts(): void {
+  private loadProducts(): void {
     this.loading$$.next(true);
-    of(this.localStorageService.getItem('cart'))
+    this.cartObservableService
+      .loadCart()
       .pipe(
         delay(1000),
         take(1),
-        tap((products) => {
-          const cartProducts = products
-            ? (JSON.parse(products) as IPurchasedProduct[])
-            : [];
-
-          this.updateCartProductsInState(cartProducts);
-        }),
+        tap((cartProducts) => this.updateCartProductsInState(cartProducts)),
+        catchError((err) => throwError(err)),
         finalize(() => this.loading$$.next(false))
       )
       .subscribe();
   }
 
   updateProducts(updatedProduct: IProduct): void {
+    const recoveryProducts = this.cartProducts$$.getValue();
+    const updatedCartProducts = recoveryProducts.map((product) => {
+      if (product.id === updatedProduct.id) {
+        const updatedCartProduct = {
+          ...updatedProduct,
+          count: product.count,
+        };
+        return updatedCartProduct;
+      }
+
+      return product;
+    });
+
     this.cartProducts$$
       .pipe(
         take(1),
-        tap((products) => {
-          const updatedCartProducts = products.map((product) =>
-            product.id === updatedProduct.id
-              ? { ...updatedProduct, count: product.count }
-              : product
+        tap(() => this.updateCartProductsInState(updatedCartProducts)),
+        switchMap(() => {
+          const updatedCartProduct = updatedCartProducts.find(
+            (product) => product.id === updatedProduct.id
           );
-
-          this.updateCartProductsInState(updatedCartProducts);
-          this.localStorageService.setItem('cart', updatedCartProducts);
+          if (updatedCartProduct) {
+            return this.cartObservableService.updateProduct(updatedCartProduct);
+          }
+          return EMPTY;
+        }),
+        catchError((err) => {
+          this.updateCartProductsInState(recoveryProducts);
+          return throwError(err);
         })
       )
       .subscribe();
   }
 
   removeAllProducts(): void {
-    this.localStorageService.setItem('cart', []);
-    this.updateCartProductsInState([]);
+    const cartProducts = this.cartProducts$$.getValue();
+
+    this.cartProducts$$
+      .pipe(
+        take(1),
+        tap(() => this.updateCartProductsInState([])),
+        switchMap(() => this.cartObservableService.clearCart(cartProducts)),
+        catchError((err) => {
+          this.updateCartProductsInState(cartProducts);
+          return throwError(err);
+        })
+      )
+      .subscribe();
   }
 
   removeProduct(productId: string): void {
+    const recoveryProducts = this.cartProducts$$.getValue();
+
     this.cartProducts$$
       .pipe(
         take(1),
@@ -89,9 +117,12 @@ export class CartListService {
           const updatedCartProducts = products.filter(
             (product) => product.id !== productId
           );
-
-          this.updateCartProductsInState(updatedCartProducts);
-          this.localStorageService.setItem('cart', updatedCartProducts);
+          return this.updateCartProductsInState(updatedCartProducts);
+        }),
+        switchMap(() => this.cartObservableService.deleteProduct(productId)),
+        catchError((err) => {
+          this.cartProducts$$.next(recoveryProducts);
+          return throwError(err);
         })
       )
       .subscribe();
@@ -105,28 +136,45 @@ export class CartListService {
   }
 
   addProduct(newProduct: IProduct): void {
+    const recoveryProducts = this.cartProducts$$.getValue();
+    const currentProduct = recoveryProducts.find(
+      (product) => product.id === newProduct.id
+    );
+
     this.cartProducts$$
       .pipe(
         take(1),
-        tap((products) => {
-          const currentProduct = products.find(
-            (product) => product.id === newProduct.id
-          );
-
+        tap(() => {
           if (!currentProduct) {
             const updatedCartProducts = [
-              ...products,
+              ...recoveryProducts,
               { ...newProduct, count: initialProductCount },
             ];
 
             this.updateCartProductsInState(updatedCartProducts);
-            this.localStorageService.setItem('cart', updatedCartProducts);
           } else {
             this.changeQuantity(currentProduct.id, currentProduct.count + 1);
           }
+        }),
+        switchMap(() => {
+          if (!currentProduct) {
+            return this.cartObservableService.addProduct({
+              ...newProduct,
+              count: initialProductCount,
+            });
+          } else {
+            return this.cartObservableService.updateProduct({
+              ...currentProduct,
+              count: currentProduct.count + 1,
+            });
+          }
+        }),
+        catchError((err) => {
+          this.updateCartProductsInState(recoveryProducts);
+          return throwError(err);
         })
       )
-      .subscribe(() => this.loadProducts());
+      .subscribe();
   }
 
   changeQuantity(productId: string, productCount: number): void {
@@ -136,15 +184,11 @@ export class CartListService {
         tap((products) => {
           const updatedCartProducts = products.map((product) =>
             product.id === productId
-              ? {
-                  ...product,
-                  count: productCount,
-                }
+              ? { ...product, count: productCount }
               : product
           );
 
           this.updateCartProductsInState(updatedCartProducts);
-          this.localStorageService.setItem('cart', updatedCartProducts);
         })
       )
       .subscribe();

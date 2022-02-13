@@ -1,6 +1,6 @@
 <h2 class="title">{{ "Products" | uppercase }}</h2>
-<ol *ngIf="!(productService.loading$ | async); else loader">
-  <li *ngFor="let product of productService.products$ | async">
+<ol *ngIf="!productsService.loading; else loader">
+  <li *ngFor="let product of products">
     <app-product
       (addProductToCart)="addProductToCart($event)"
       [product]="product"

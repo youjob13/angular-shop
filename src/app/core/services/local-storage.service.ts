@@ -22,6 +22,14 @@ export class LocalStorageService {
     return this.storage.getItem(key);
   }
 
+  getParsedItem<T>(key: string): T | null {
+    const data = this.storage.getItem(key);
+    if (data === null) {
+      return null;
+    }
+    return JSON.parse(data);
+  }
+
   removeItem(key: string): void {
     this.storage.removeItem(key);
   }

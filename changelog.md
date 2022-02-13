@@ -1,3 +1,14 @@
+## [0.0.6] - 2022-02-13
+
+### Added
+
+HttpClient;
+
+- add json-server,
+- add ProductsPromiseService & CartObservableService,
+- add TimingInterceptor,
+- store AppSettings in localStorage,
+
 ## [0.0.5] - 2022-02-06
 
 ### Added
@@ -65,6 +76,7 @@ Additional functionality:
 - a little layout
 - first component
 
+[0.0.6]: https://github.com/youjob13/angular-shop/compare/feat/task-5...feat/task-6
 [0.0.5]: https://github.com/youjob13/angular-shop/compare/feat/task-4...feat/task-5
 [0.0.4]: https://github.com/youjob13/angular-shop/compare/feat/task-3...feat/task-3
 [0.0.3]: https://github.com/youjob13/angular-shop/compare/feat/task-2...feat/task-3
