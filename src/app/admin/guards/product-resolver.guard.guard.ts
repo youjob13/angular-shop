@@ -40,7 +40,7 @@ export class ProductResolverGuard implements Resolve<Partial<IProduct>> {
       return of(billetProduct);
     }
 
-    return this.productsService.getProduct(id).pipe(
+    return of(this.productsService.getProduct(id)).pipe(
       switchMap((product) => {
         if (product == null) {
           return this.onGoBack();

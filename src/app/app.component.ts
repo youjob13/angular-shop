@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AppSettingsService } from './core/services/app-settings.service';
 import { DetailsService } from './details/services/details.service';
 import { appearance, swipe } from './shared/animations/route-animations';
 
@@ -26,8 +27,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     private router: Router,
     private upperCasePipe: UpperCasePipe,
-    private detailsService: DetailsService
-  ) {}
+    private detailsService: DetailsService,
+    private appSettings: AppSettingsService
+  ) {
+    this.appSettings.loadSettings();
+  }
 
   ngOnInit(): void {
     this.setDetailsOnRefresh();

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EMPTY } from 'rxjs';
+import { EMPTY, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { CartListService } from 'src/app/cart/services/cart-list.service';
 
@@ -27,7 +27,9 @@ export class ProductViewComponent implements OnInit {
       .pipe(
         switchMap((paramMap) => {
           const productID = paramMap.get('id');
-          return productID ? this.productsService.getProduct(productID) : EMPTY;
+          return productID
+            ? of(this.productsService.getProduct(productID))
+            : EMPTY;
         })
       )
       .subscribe(
