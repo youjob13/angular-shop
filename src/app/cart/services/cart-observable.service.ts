@@ -49,11 +49,10 @@ export class CartObservableService {
     return this.httpClient.delete<void>(pathToCartProducts);
   }
 
-  clearCart(cartProducts: IPurchasedProduct[]): Observable<void> {
+  clearCart(cartProducts: IPurchasedProduct[]): Observable<void[]> {
+    // The rest-parameters signature will be removed in v8.
     return forkJoin(
-      ...cartProducts.map((product) => {
-        return this.deleteProduct(product.id);
-      })
+      cartProducts.map(product => this.deleteProduct(product.id))
     );
   }
 }
