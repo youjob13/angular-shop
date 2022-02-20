@@ -1,12 +1,14 @@
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { AppState } from 'src/app/core/@ngrx/app.state';
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-} from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+  selectProducts,
+  selectProductsLoading,
+} from 'src/app/core/@ngrx/products/products.selectors';
 import { ProductsService } from 'src/app/products/services/products.service';
 import { IProduct } from 'src/app/shared/models/product.model';
+import * as RouterActions from '../../../core/@ngrx/router/router.actions';
 
 @Component({
   selector: 'app-products',
@@ -15,25 +17,21 @@ import { IProduct } from 'src/app/shared/models/product.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsComponent implements OnInit {
-  products!: IProduct[];
+  products$!: Observable<readonly IProduct[]>;
+  loading$!: Observable<boolean>;
 
   constructor(
     public productsService: ProductsService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private changeDetector: ChangeDetectorRef
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
-    this.productsService.getProducts().then((res) => {
-      this.products = res;
-      this.changeDetector.markForCheck();
-    });
+    this.products$ = this.store.select(selectProducts);
+    this.loading$ = this.store.select(selectProductsLoading);
   }
 
   onEditProduct(product: IProduct): void {
-    const URL = ['../product/edit', product.id];
-
-    this.router.navigate(URL, { relativeTo: this.route });
+    const URL = ['admin/product/edit', product.id];
+    this.store.dispatch(RouterActions.Navigate({ path: URL }));
   }
 }

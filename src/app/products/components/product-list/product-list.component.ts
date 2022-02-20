@@ -1,14 +1,16 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CartListService } from 'src/app/cart/services/cart-list.service';
 
 import { IProduct } from '../../../shared/models/product.model';
 import { ProductsService } from '../../services/products.service';
 import { CanActivate } from '@angular/router';
+import { AppState } from 'src/app/core/@ngrx/app.state';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import {
+  selectProducts,
+  selectProductsLoading,
+} from 'src/app/core/@ngrx/products/products.selectors';
 
 @Component({
   templateUrl: './product-list.component.html',
@@ -16,19 +18,18 @@ import { CanActivate } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductListComponent implements OnInit, CanActivate {
-  products!: IProduct[];
+  products$!: Observable<readonly IProduct[]>;
+  loading$!: Observable<boolean>;
 
   constructor(
     public productsService: ProductsService,
     private cartListService: CartListService,
-    private changeDetector: ChangeDetectorRef
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
-    this.productsService.getProducts().then((res) => {
-      this.products = res;
-      this.changeDetector.markForCheck();
-    });
+    this.products$ = this.store.select(selectProducts);
+    this.loading$ = this.store.select(selectProductsLoading);
   }
 
   canActivate(): boolean {

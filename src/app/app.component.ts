@@ -7,11 +7,14 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NavigationStart, Router, RouterOutlet } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { filter } from 'rxjs/operators';
+import { AppState } from './core/@ngrx/app.state';
 import { AppSettingsService } from './core/services/app-settings.service';
 import { DetailsService } from './details/services/details.service';
 import { appearance, swipe } from './shared/animations/route-animations';
-
+import * as ProductsActions from './core/@ngrx/products/products.actions';
+import * as RouterActions from './core/@ngrx/router/router.actions';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -28,12 +31,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     private router: Router,
     private upperCasePipe: UpperCasePipe,
     private detailsService: DetailsService,
-    private appSettings: AppSettingsService
+    private appSettings: AppSettingsService,
+    private store: Store<AppState>
   ) {
     this.appSettings.loadSettings();
   }
 
   ngOnInit(): void {
+    this.store.dispatch(ProductsActions.getProducts());
     this.setDetailsOnRefresh();
   }
 
@@ -63,9 +68,13 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   onToggleDetails(): void {
     if (!this.detailsService.isOpen) {
-      this.router.navigate([{ outlets: { details: 'news' } }]);
+      this.store.dispatch(
+        RouterActions.NavigateOutlet({ outlets: { details: 'news' } })
+      );
     } else {
-      this.router.navigate([{ outlets: { details: null } }]);
+      this.store.dispatch(
+        RouterActions.NavigateOutlet({ outlets: { details: null } })
+      );
     }
     this.setDetailsAnimState();
   }
