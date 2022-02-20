@@ -1,60 +1,44 @@
 import { EMPTY, Observable, of } from 'rxjs';
-import { ProductsService } from 'src/app/products/services/products.service';
-import { Category, IProduct } from 'src/app/shared/models/product.model';
+import { IProduct } from 'src/app/shared/models/product.model';
 
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  Resolve,
-  Router,
-  RouterStateSnapshot,
-} from '@angular/router';
-import { catchError, switchMap, take } from 'rxjs/operators';
-
+import { Resolve } from '@angular/router';
+import { catchError, switchMap, take, tap } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/core/@ngrx/app.state';
+import { selectProductById } from 'src/app/core/@ngrx/products/products.selectors';
+import * as ProductsAction from '../../core/@ngrx/products/products.actions';
+import * as RouterAction from '../../core/@ngrx/router/router.actions';
 @Injectable({
   providedIn: 'any',
 })
 export class ProductResolverGuard implements Resolve<Partial<IProduct>> {
-  constructor(
-    private productsService: ProductsService,
-    private router: Router
-  ) {}
+  constructor(private store: Store<AppState>) {}
 
-  resolve(
-    route: ActivatedRouteSnapshot
-  ):
-    | Partial<IProduct>
-    | Observable<Partial<IProduct>>
-    | Promise<Partial<IProduct>> {
-    const id = route.paramMap.get('ID');
-
-    const billetProduct = {
-      name: '',
-      description: '',
-      category: Category.OTHER,
-      price: 0,
-      quantity: 0,
-    } as Partial<IProduct>;
-
-    if (id == null) {
-      return of(billetProduct);
-    }
-
-    return of(this.productsService.getProduct(id)).pipe(
-      switchMap((product) => {
-        if (product == null) {
-          return this.onGoBack();
+  resolve(): Observable<Partial<IProduct>> {
+    return this.store.select(selectProductById).pipe(
+      tap((product) =>
+        this.store.dispatch(
+          ProductsAction.setInitialProduct({ initialProduct: product })
+        )
+      ),
+      switchMap((product: Partial<IProduct>) => {
+        if (product) {
+          return of(product);
+        } else {
+          this.store.dispatch(
+            RouterAction.Navigate({ path: ['/admin/products'] })
+          );
+          return EMPTY;
         }
-
-        return of(product);
       }),
       take(1),
-      catchError(() => this.onGoBack())
+      catchError(() => {
+        this.store.dispatch(
+          RouterAction.Navigate({ path: ['/admin/products'] })
+        );
+        return EMPTY;
+      })
     );
-  }
-
-  private onGoBack(): Observable<never> {
-    this.router.navigate(['/admin/products']);
-    return EMPTY;
   }
 }

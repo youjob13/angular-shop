@@ -1,14 +1,17 @@
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { ProductsService } from 'src/app/products/services/products.service';
+import { Observable, of } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
 import { Category, IProduct } from 'src/app/shared/models/product.model';
 
-import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, UrlTree } from '@angular/router';
+import { UrlTree } from '@angular/router';
 
 import { CanComponentDeactivate } from '../../interfaces/can-component-deactivate.interface';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/core/@ngrx/app.state';
+import * as ProductsActions from '../../../core/@ngrx/products/products.actions';
+import * as RouterActions from '../../../core/@ngrx/router/router.actions';
+import { selectProductById } from 'src/app/core/@ngrx/products/products.selectors';
 
 const DEFAULT_PRODUCT_IMAGE = '/assets/default.png';
 
@@ -28,47 +31,46 @@ export class ProductFormComponent implements OnInit, CanComponentDeactivate {
     imageUrl: new FormControl(''),
   });
 
-  private initialProduct!: IProduct;
   private isSave = false;
   categories = [Category.LAPTOP, Category.SMARTPHONE, Category.OTHER];
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private productsService: ProductsService,
-    private location: Location
-  ) {}
+  constructor(private store: Store<AppState>) {}
 
   canDeactivate():
     | boolean
     | UrlTree
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree> {
-    const isNotEdited = (
-      Object.keys(this.initialProduct) as (keyof IProduct)[]
-    ).every(
-      (property) =>
-        property === 'id' ||
-        this.initialProduct[property] === this.productForm.value[property]
+    return this.store.select(selectProductById).pipe(
+      switchMap((initialProduct: IProduct) => {
+        const isNotEdited = (
+          Object.keys(initialProduct) as (keyof IProduct)[]
+        ).every(
+          (property) =>
+            property === 'id' ||
+            initialProduct[property] === this.productForm.value[property]
+        );
+
+        if (isNotEdited) {
+          return of(true);
+        }
+
+        if (this.isSave) {
+          return of(true);
+        }
+
+        return of(
+          confirm('Are you sure? All completed information will be lost')
+        );
+      })
     );
-
-    if (isNotEdited) {
-      return true;
-    }
-
-    if (this.isSave) {
-      return true;
-    }
-
-    return confirm('Are you sure? All completed information will be lost');
   }
 
   ngOnInit(): void {
-    this.route.data
-      .pipe(map((data) => data.product))
-      .subscribe((product: IProduct) => {
-        this.initialProduct = product;
-
+    this.store
+      .select(selectProductById)
+      .pipe(take(1))
+      .subscribe((product) => {
         this.productForm.controls.name.setValue(product.name || '');
         this.productForm.controls.description.setValue(
           product.description || ''
@@ -86,23 +88,30 @@ export class ProductFormComponent implements OnInit, CanComponentDeactivate {
   onSave(): void {
     this.isSave = true;
 
-    if (this.initialProduct.id) {
-      this.productsService.updateProduct(
-        this.initialProduct,
-        this.productForm.value
-      );
-    } else {
-      this.productsService.addProduct(this.productForm.value);
-    }
-
-    this.location.back();
+    this.store
+      .select(selectProductById)
+      .pipe(take(1))
+      .subscribe((initialProduct) => {
+        if (initialProduct.id) {
+          const updatedProduct: IProduct = {
+            ...initialProduct,
+            ...this.productForm.value,
+          };
+          this.store.dispatch(
+            ProductsActions.updateProduct({ updatedProduct })
+          );
+        } else {
+          const product: IProduct = this.productForm.value;
+          this.store.dispatch(ProductsActions.addProduct({ product }));
+        }
+      });
   }
 
   onGoBack(): void {
-    this.router.navigate(['admin/products']);
+    this.store.dispatch(RouterActions.Navigate({ path: ['admin/products'] }));
   }
 
-  onFileChange(event: Event) {
+  onFileChange(event: Event): void {
     const { files } = event.target as any;
     let file = files[0];
 
