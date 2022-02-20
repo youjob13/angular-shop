@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { httpInterceptorProviders } from './core';
+import { AppStoreModule } from './core/@ngrx/app-store.module';
 import { ProductsModule } from './products/products.module';
 
 @NgModule({
@@ -15,6 +16,7 @@ import { ProductsModule } from './products/products.module';
     BrowserAnimationsModule,
     HttpClientModule,
     ProductsModule,
+    AppStoreModule,
     AppRoutingModule,
   ],
   providers: [...httpInterceptorProviders],

@@ -1,8 +1,8 @@
 <button routerLink="/admin/product/add">Add new product</button>
 <hr />
 
-<ul *ngIf="!productsService.loading; else loader">
-  <li *ngFor="let product of products">
+<ul *ngIf="!(loading$ | async); else loader">
+  <li *ngFor="let product of products$ | async">
     <app-first
       [name]="product.name"
       [description]="product.description"

@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, UrlTree } from '@angular/router';
+import { CanActivate, UrlTree } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { AppState } from '../@ngrx/app.state';
 import { AuthService } from '../services';
-
+import * as RouterActions from '../@ngrx/router/router.actions';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private store: Store<AppState>
+  ) {}
 
   canActivate():
     | Observable<boolean | UrlTree>
@@ -19,7 +24,9 @@ export class AuthGuard implements CanActivate {
     if (isAdmin) {
       return true;
     }
+
     alert("You don't have any access");
-    return this.router.navigate(['forbidden']);
+    this.store.dispatch(RouterActions.Navigate({ path: ['forbidden'] }));
+    return false;
   }
 }
