@@ -2,12 +2,12 @@
 
 ### Added
 
-HttpClient;
+NgRx;
 
-- add json-server,
-- add ProductsPromiseService & CartObservableService,
-- add TimingInterceptor,
-- store AppSettings in localStorage,
+- add ProductState & AppState,
+- add Products effects, products selectors, products actions, products reducers,
+- add RouterState, router reducers, router actions, router effects,
+
 
 ## [0.0.6] - 2022-02-13
 
