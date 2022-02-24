@@ -1,0 +1,14 @@
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 20rem;
+}
+
+label {
+  display: flex;
+  justify-content: space-between;
+}
+
+.invalid {
+  border: 2px solid red;
+}

@@ -1,1 +1,58 @@
-<p>process-order works!</p>
+<form [formGroup]="processOrderForm" (submit)="onSubmit()">
+  <div>
+    <label [ngClass]="{ invalid: isValidControl('userName') }">
+      <span>Name: </span><input type="text" formControlName="userName" />
+    </label>
+    <p *ngIf="isValidControl('userName')">
+      {{ validationMessagesMap.get("userName") }}
+    </p>
+  </div>
+
+  <div>
+    <label>
+      <span>Last name: </span>
+      <input type="text" formControlName="userLastName" />
+    </label>
+  </div>
+
+  <div>
+    <label [ngClass]="{ invalid: isValidControl('email') }">
+      <span>Email: </span>
+      <input type="text" emailValidator formControlName="email" />
+    </label>
+    <p *ngIf="isValidControl('email')">
+      {{ validationMessagesMap.get("email") }}
+    </p>
+  </div>
+
+  <div formArrayName="phones">
+    <label *ngFor="let phone of phones.controls; let i = index">
+      <span>Phone: </span>
+      <input type="text" [formControlName]="i" />
+      <button (click)="onRemovePhoneControl(i)" *ngIf="i > 0">Remove</button>
+    </label>
+
+    <button (click)="onAddPhoneControl()">Add</button>
+  </div>
+
+  <div>
+    <label>
+      <span>Delivery: </span>
+      <div>
+        <input type="checkbox" formControlName="selfDelivery" />
+        <span>Self Delivery</span>
+      </div>
+    </label>
+  </div>
+
+  <div *ngIf="!deliveryMethod.value">
+    <label>
+      <span>Address: </span>
+      <textarea type="text" formControlName="address"></textarea>
+    </label>
+  </div>
+
+  <button type="submit" [disabled]="!processOrderForm.valid">
+    Confirm order
+  </button>
+</form>

@@ -1,3 +1,13 @@
+## [0.0.8] - 2022-02-25
+
+### Added
+
+Forms;
+
+- add processOrderComponent,
+- add custom name validator & email directive validator,
+- add an output validation error message;
+
 ## [0.0.7] - 2022-02-20
 
 ### Added
@@ -7,7 +17,6 @@ NgRx;
 - add ProductState & AppState,
 - add Products effects, products selectors, products actions, products reducers,
 - add RouterState, router reducers, router actions, router effects,
-
 
 ## [0.0.6] - 2022-02-13
 
@@ -87,6 +96,7 @@ Additional functionality:
 - a little layout
 - first component
 
+[0.0.8]: https://github.com/youjob13/angular-shop/compare/feat/task-7...feat/task-8
 [0.0.7]: https://github.com/youjob13/angular-shop/compare/feat/task-6...feat/task-7
 [0.0.6]: https://github.com/youjob13/angular-shop/compare/feat/task-5...feat/task-6
 [0.0.5]: https://github.com/youjob13/angular-shop/compare/feat/task-4...feat/task-5
