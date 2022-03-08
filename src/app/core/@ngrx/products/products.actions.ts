@@ -1,6 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 import { IProduct } from 'src/app/shared/models/product.model';
 
+// хорошее решение, возможно назвать ProductsActionTypes
+// так как в другом модуле происходит импорт всех Actions через объект ProductsActions
 export enum ProductsActions {
   GetProducts = '[Products List Page (App)] GET_PRODUCTS',
   GetProductsSuccess = '[Products List Page (App)] GET_PRODUCTS_SUCCESS',
