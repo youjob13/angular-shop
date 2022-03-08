@@ -71,6 +71,8 @@ export class ProductFormComponent implements OnInit, CanComponentDeactivate {
       .select(selectProductById)
       .pipe(take(1))
       .subscribe((product) => {
+        // а тут не получалось установить значения сразу всем полям,
+        // используя this.productForm.setValue({...})?
         this.productForm.controls.name.setValue(product.name || '');
         this.productForm.controls.description.setValue(
           product.description || ''
